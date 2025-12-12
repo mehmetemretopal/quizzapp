@@ -2,6 +2,7 @@ import { Box, Button, Grid, Modal, Stack, Typography } from "@mui/material"
 import { useEffect, useState } from "react"
 import { useQuiz } from "../Context/QuizProvider";
 import BasicModal from "./BasicModal";
+import { render } from "./Infromation";
 
 
 export const QuestionButton: React.FC = () => {
@@ -13,7 +14,24 @@ export const QuestionButton: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [showResult, setShowResult] = useState<boolean>(false)
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [timeExpired, setTimeExpired] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>("");
+  const [second, setSecond] = useState<number>()
+
+  const hesaplatime = () => {
+    const second = currentQuestion!.time
+    if (second > 1) {
+      setSecond(prevSecond => prevSecond! - 1)
+      setTimeExpired(false)
+      return second
+    } else {
+      setTimeExpired(true)
+      return 0
+    }
+
+  }
+
+  console.log(second);
 
 
   useEffect(() => {
@@ -23,7 +41,7 @@ export const QuestionButton: React.FC = () => {
 
     if (!currentQuestion) return;
 
-    if (personanswer === currentQuestion.questionanswer && currentQuestion.time >= 0) {
+    if (personanswer === currentQuestion.questionanswer || hesaplatime() > 0) {
       goToNextQuestion()
       const timer = setTimeout(() => {
         setPersonAnswer(null)
@@ -38,16 +56,6 @@ export const QuestionButton: React.FC = () => {
 
   }, [personanswer, currentQuestionIndex, questions]);
 
-  /*
-  useEffect(() => {
-    if (currentQuestionIndex >= questions.length) {
-      setModalMessage("🎉 Tebrikler, quiz bitti!");
-      setOpenModal(true);
-    }
-  }, [currentQuestionIndex, questions.length]);
-
-  
-  */
 
   if (isLoading) {
     return <div>Sorular yükleniyor...</div>;
@@ -56,7 +64,6 @@ export const QuestionButton: React.FC = () => {
   if (questions.length === 0) {
     return <div>{message || "Gösterilebilecek soru bulunamadı."}</div>;
   }
-
 
   const handleCevapSecimi = (secilenCevap: string) => {
     if (!selectedOption) {
@@ -69,15 +76,12 @@ export const QuestionButton: React.FC = () => {
             setSelectedOption(null);
             setShowResult(false);
           }, 1500);
-
         } else {
           setTimeout(() => {
             setModalMessage("Yanlış cevap! Oyun bitti. Kazanılan tutar " + currentQuestion?.price + "₺");
             setOpenModal(true);
           }, 1500);
         }
-
-
       }, 1500);
     }
   };
@@ -95,13 +99,13 @@ export const QuestionButton: React.FC = () => {
       }
     }
     return 'inherit';
+
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
     resetGame()
     setSelectedOption(null)
-
   };
 
 
