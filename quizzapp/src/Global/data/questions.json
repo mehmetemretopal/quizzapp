@@ -1,0 +1,31 @@
+[
+    {
+        "id": 1,
+        "question": "Türkiye'nin başkenti neresidir?",
+        "questionanswer": "Ankara",
+        "options": [
+            "İstanbul",
+            "İzmir",
+            "Ankara",
+            "Bursa"
+        ],
+        "time": 30000,
+        "person": "Mehmet Emre",
+        "price": 20
+    },
+    {
+        "id": 2,
+        "question": "Galatasaray hangi yıl UEFA kupasını almıştır?",
+        "questionanswer": "a",
+        "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+        ],
+        "time": 40000,
+        "person": "Emre Topal",
+        "price":20
+
+    }
+]
